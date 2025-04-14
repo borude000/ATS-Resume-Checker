@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Resume Analysis History{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="display-4">Your Resume Analysis History</h1>
+            <p class="lead">View your previous resume analyses</p>
+            <a href="{{ url_for('index') }}" class="btn btn-primary">
+                <i class="bi bi-arrow-left-circle"></i> Back to Home
+            </a>
+        </div>
+    </div>
+
+    {% if analyses %}
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>File Name</th>
+                            <th>Overall Score</th>
+                            <th>ATS Score</th>
+                            <th>Keyword Match</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for analysis in analyses %}
+                        <tr>
+                            <td>{{ analysis.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td>{{ analysis.original_filename or 'Unknown file' }}</td>
+                            <td>
+                                <div class="progress" role="progressbar" aria-label="Overall Score" aria-valuenow="{{ analysis.overall_score }}" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar {{ 'bg-success' if analysis.overall_score >= 80 else 'bg-warning' if analysis.overall_score >= 60 else 'bg-danger' }}" style="width: {{ analysis.overall_score }}%">{{ analysis.overall_score }}%</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="progress" role="progressbar" aria-label="ATS Score" aria-valuenow="{{ analysis.ats_score }}" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar {{ 'bg-success' if analysis.ats_score >= 80 else 'bg-warning' if analysis.ats_score >= 60 else 'bg-danger' }}" style="width: {{ analysis.ats_score }}%">{{ analysis.ats_score }}%</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="progress" role="progressbar" aria-label="Keyword Match" aria-valuenow="{{ analysis.keyword_match_percentage }}" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar {{ 'bg-success' if analysis.keyword_match_percentage >= 80 else 'bg-warning' if analysis.keyword_match_percentage >= 60 else 'bg-danger' }}" style="width: {{ analysis.keyword_match_percentage }}%">{{ analysis.keyword_match_percentage|round|int }}%</div>
+                                </div>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('view_analysis', analysis_id=analysis.id) }}" class="btn btn-sm btn-primary">
+                                    <i class="bi bi-eye"></i> View
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col">
+            <div class="alert alert-info">
+                <h4 class="alert-heading">No analysis history found</h4>
+                <p>You haven't analyzed any resumes yet. Upload a resume to get started.</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
