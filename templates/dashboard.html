@@ -1,0 +1,389 @@
+{% extends 'base.html' %}
+
+{% block extra_head %}
+<style>
+    .score-circle {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        font-size: 3rem;
+        font-weight: bold;
+    }
+    
+    .keyword-badge {
+        margin: 0.2rem;
+        font-size: 0.9rem;
+    }
+    
+    .suggestion-item {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .suggestion-item:last-child {
+        border-bottom: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Resume Analysis Results</h2>
+                <div class="row">
+                    <div class="col-lg-4 mb-4 text-center">
+                        <h4>Overall Score</h4>
+                        <div class="score-circle mb-3" id="overall-score-circle">
+                            {{ results.overall_score }}
+                        </div>
+                        <p class="lead">
+                            {% if results.overall_score >= 80 %}
+                                Excellent Resume!
+                            {% elif results.overall_score >= 60 %}
+                                Good Resume, Some Improvements Needed
+                            {% else %}
+                                Needs Significant Improvements
+                            {% endif %}
+                        </p>
+                        <button class="btn btn-primary" onclick="window.print()">
+                            <i class="fas fa-print me-2"></i>Print Report
+                        </button>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <i class="fas fa-robot me-2"></i>
+                                            ATS Compatibility
+                                        </h5>
+                                        <h3 class="text-center my-3">{{ results.ats_compatibility.score }}/100</h3>
+                                        <div class="progress mb-3">
+                                            <div class="progress-bar progress-bar-striped" role="progressbar"
+                                                style="width: {{ results.ats_compatibility.score }}%"
+                                                aria-valuenow="{{ results.ats_compatibility.score }}" aria-valuemin="0" aria-valuemax="100">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <i class="fas fa-key me-2"></i>
+                                            Keyword Match
+                                        </h5>
+                                        <h3 class="text-center my-3">{{ results.keyword_match.percentage|round(1) }}%</h3>
+                                        <div class="progress mb-3">
+                                            <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
+                                                style="width: {{ results.keyword_match.percentage }}%"
+                                                aria-valuenow="{{ results.keyword_match.percentage }}" aria-valuemin="0" aria-valuemax="100">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <i class="fas fa-file-alt me-2"></i>
+                                            Resume Structure
+                                        </h5>
+                                        <h3 class="text-center my-3">{{ results.structure_assessment.score }}/100</h3>
+                                        <div class="progress mb-3">
+                                            <div class="progress-bar progress-bar-striped bg-info" role="progressbar"
+                                                style="width: {{ results.structure_assessment.score }}%"
+                                                aria-valuenow="{{ results.structure_assessment.score }}" aria-valuemin="0" aria-valuemax="100">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <i class="fas fa-exchange-alt me-2"></i>
+                                            Content Relevance
+                                        </h5>
+                                        <h3 class="text-center my-3">{{ results.semantic_similarity|round(1) }}%</h3>
+                                        <div class="progress mb-3">
+                                            <div class="progress-bar progress-bar-striped bg-warning" role="progressbar"
+                                                style="width: {{ results.semantic_similarity }}%"
+                                                aria-valuenow="{{ results.semantic_similarity }}" aria-valuemin="0" aria-valuemax="100">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-pie me-2"></i>
+                    Score Breakdown
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="scoreChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-lightbulb me-2"></i>
+                    Improvement Suggestions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="suggestion-list">
+                    {% if results.suggestions %}
+                        {% for suggestion in results.suggestions %}
+                            <div class="suggestion-item">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                {{ suggestion }}
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-center">No suggestions to display.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-key me-2"></i>
+                    Matched Keywords
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if results.keyword_match.matched_keywords %}
+                    <div class="mb-3">
+                        {% for keyword in results.keyword_match.matched_keywords %}
+                            <span class="badge bg-success keyword-badge">{{ keyword }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-center">No matched keywords found.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Missing Keywords
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if results.keyword_match.missing_keywords %}
+                    <div class="mb-3">
+                        {% for keyword in results.keyword_match.missing_keywords %}
+                            <span class="badge bg-danger keyword-badge">{{ keyword }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Consider adding these keywords to your resume to improve your match rate.
+                    </div>
+                {% else %}
+                    <p class="text-center">No missing keywords! Great job.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-robot me-2"></i>
+                    ATS Issues
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if results.ats_compatibility.issues %}
+                    <ul class="list-group list-group-flush">
+                        {% for issue in results.ats_compatibility.issues %}
+                            <li class="list-group-item bg-transparent">
+                                <i class="fas fa-exclamation-circle text-warning me-2"></i>
+                                {{ issue }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-center">No ATS issues found! Your resume should be easy for ATS systems to parse.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-file-alt me-2"></i>
+                    Resume Structure Issues
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if results.structure_assessment.issues %}
+                    <ul class="list-group list-group-flush">
+                        {% for issue in results.structure_assessment.issues %}
+                            <li class="list-group-item bg-transparent">
+                                <i class="fas fa-exclamation-circle text-warning me-2"></i>
+                                {{ issue }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-center">No structure issues found! Your resume is well-structured.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-file-alt me-2"></i>
+                    Resume Preview
+                </h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">{{ results.resume_preview }}</p>
+                <p class="text-center">
+                    <small class="text-muted">This is just a preview. The full text was analyzed in the assessment.</small>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="text-center">
+            <a href="/" class="btn btn-primary btn-lg">
+                <i class="fas fa-arrow-left me-2"></i>
+                Analyze Another Resume
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set color for overall score circle
+        const overallScore = {{ results.overall_score }};
+        const scoreCircle = document.getElementById('overall-score-circle');
+        
+        if (overallScore >= 80) {
+            scoreCircle.style.backgroundColor = 'rgba(40, 167, 69, 0.2)';
+            scoreCircle.style.color = '#28a745';
+            scoreCircle.style.border = '8px solid #28a745';
+        } else if (overallScore >= 60) {
+            scoreCircle.style.backgroundColor = 'rgba(255, 193, 7, 0.2)';
+            scoreCircle.style.color = '#ffc107';
+            scoreCircle.style.border = '8px solid #ffc107';
+        } else {
+            scoreCircle.style.backgroundColor = 'rgba(220, 53, 69, 0.2)';
+            scoreCircle.style.color = '#dc3545';
+            scoreCircle.style.border = '8px solid #dc3545';
+        }
+        
+        // Create radar chart for score breakdown
+        const ctx = document.getElementById('scoreChart').getContext('2d');
+        const scoreChart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['ATS Compatibility', 'Keyword Match', 'Resume Structure', 'Content Relevance'],
+                datasets: [{
+                    label: 'Score Breakdown',
+                    data: [
+                        {{ results.ats_compatibility.score }}, 
+                        {{ results.keyword_match.percentage }}, 
+                        {{ results.structure_assessment.score }}, 
+                        {{ results.semantic_similarity }}
+                    ],
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(54, 162, 235, 1)'
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    r: {
+                        angleLines: {
+                            display: true,
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        pointLabels: {
+                            color: 'rgba(255, 255, 255, 0.7)',
+                            font: {
+                                size: 12
+                            }
+                        },
+                        suggestedMin: 0,
+                        suggestedMax: 100,
+                        ticks: {
+                            stepSize: 20,
+                            color: 'rgba(255, 255, 255, 0.5)',
+                            backdropColor: 'transparent'
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

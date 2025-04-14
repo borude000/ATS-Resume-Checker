@@ -1,0 +1,89 @@
+/* Custom styles for the ATS Resume Checker */
+
+/* Feature Icons */
+.feature-icon {
+    margin-bottom: 1rem;
+    color: var(--bs-primary);
+}
+
+/* Step circles for "How it works" section */
+.step-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--bs-primary);
+    color: white;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+/* Dashboard page styles */
+.dashboard-card {
+    transition: transform 0.2s;
+    height: 100%;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Print styles */
+@media print {
+    .navbar, .footer, button, .btn {
+        display: none !important;
+    }
+    
+    .container {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .card {
+        border: 1px solid #ddd;
+        margin-bottom: 15px;
+    }
+    
+    body {
+        background-color: white;
+        color: black;
+    }
+    
+    .score-circle {
+        border: 5px solid #333 !important;
+        color: #333 !important;
+    }
+    
+    .progress {
+        border: 1px solid #ddd;
+    }
+    
+    /* Ensure all charts are visible */
+    canvas {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+}
+
+/* Footer styles */
+.footer {
+    margin-top: 3rem;
+    padding: 1.5rem 0;
+    background-color: var(--bs-dark);
+}
+
+/* File upload styles */
+.form-file {
+    position: relative;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .score-circle {
+        width: 120px;
+        height: 120px;
+        font-size: 2.5rem;
+    }
+}

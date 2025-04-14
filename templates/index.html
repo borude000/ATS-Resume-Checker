@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card mb-5">
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <h1 class="display-4">ATS Resume Checker</h1>
+                    <p class="lead">Upload your resume and a job description to see how well they match</p>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-4 text-center mb-3 mb-md-0">
+                        <div class="feature-icon">
+                            <i class="fas fa-robot fa-3x mb-3 text-primary"></i>
+                        </div>
+                        <h5>ATS Compatibility</h5>
+                        <p>Check if your resume is optimized for Applicant Tracking Systems</p>
+                    </div>
+                    <div class="col-md-4 text-center mb-3 mb-md-0">
+                        <div class="feature-icon">
+                            <i class="fas fa-key fa-3x mb-3 text-primary"></i>
+                        </div>
+                        <h5>Keyword Analysis</h5>
+                        <p>Find key terms your resume is missing from the job description</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-lightbulb fa-3x mb-3 text-primary"></i>
+                        </div>
+                        <h5>Smart Suggestions</h5>
+                        <p>Get personalized recommendations to improve your resume</p>
+                    </div>
+                </div>
+                
+                <form action="/analyze" method="post" enctype="multipart/form-data">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h3 class="h5 mb-0">
+                                <i class="fas fa-file-upload me-2"></i>
+                                Upload Your Resume
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="resume" class="form-label">Select a PDF file</label>
+                                <input class="form-control" type="file" id="resume" name="resume" accept=".pdf" required>
+                                <div class="form-text">Your resume must be in PDF format</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h3 class="h5 mb-0">
+                                <i class="fas fa-briefcase me-2"></i>
+                                Job Description
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="job_description" class="form-label">Paste the job description</label>
+                                <textarea class="form-control" id="job_description" name="job_description" rows="6" placeholder="Copy and paste the full job description here..." required></textarea>
+                                <div class="form-text">For the best results, include the entire job description</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-search me-2"></i>
+                            Analyze Resume
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h3 class="h5 mb-0">How It Works</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 text-center mb-3 mb-md-0">
+                        <div class="step-circle mb-2">1</div>
+                        <h6>Upload</h6>
+                        <p class="small">Upload your resume as a PDF file</p>
+                    </div>
+                    <div class="col-md-3 text-center mb-3 mb-md-0">
+                        <div class="step-circle mb-2">2</div>
+                        <h6>Add Job Details</h6>
+                        <p class="small">Paste the job description you're applying for</p>
+                    </div>
+                    <div class="col-md-3 text-center mb-3 mb-md-0">
+                        <div class="step-circle mb-2">3</div>
+                        <h6>Analyze</h6>
+                        <p class="small">Our AI analyzes your resume against ATS criteria</p>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="step-circle mb-2">4</div>
+                        <h6>Improve</h6>
+                        <p class="small">Get actionable tips to enhance your resume</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
