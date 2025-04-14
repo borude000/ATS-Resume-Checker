@@ -207,13 +207,13 @@ class ResumeAnalyzer:
             # Calculate cosine similarity
             similarity = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:2])[0][0]
             
-            # Convert to percentage
-            similarity_percentage = similarity * 100
+            # Convert to percentage and ensure it's a Python float (not NumPy float)
+            similarity_percentage = float(similarity * 100)
             
             return similarity_percentage
         except Exception as e:
             logging.error(f"Error calculating semantic similarity: {str(e)}")
-            return 0
+            return 0.0
     
     def calculate_overall_score(self, ats_score, keyword_match_percentage, structure_score, semantic_similarity):
         """Calculate overall resume quality score"""

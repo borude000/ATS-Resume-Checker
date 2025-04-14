@@ -185,6 +185,10 @@ def analyze_resume():
             # Add job description to results
             results['job_description'] = job_description
             
+            # Ensure all numeric values are Python native types, not NumPy types
+            if isinstance(results.get('semantic_similarity'), object) and hasattr(results.get('semantic_similarity'), 'item'):
+                results['semantic_similarity'] = float(results['semantic_similarity'])
+            
             # Save results to database
             analysis = ResumeAnalysis(
                 session_id=analysis_id,
