@@ -10,32 +10,6 @@ document.addEventListener('DOMContentLoaded', function() {
     setupEnhancedFileUpload();
     setupFormSubmission();
     
-    // Job description form validation
-    const analyzeForm = document.querySelector('form[action="/analyze"]');
-    if (analyzeForm) {
-        analyzeForm.addEventListener('submit', function(e) {
-            const jobDescription = document.getElementById('job_description').value.trim();
-            
-            if (jobDescription.length < 50) {
-                e.preventDefault();
-                showToast('Warning', 'Please enter a more detailed job description (at least 50 characters).', 'warning');
-                return false;
-            }
-            
-            // Show loading state
-            const submitButton = this.querySelector('button[type="submit"]');
-            if (submitButton) {
-                submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Analyzing...';
-                submitButton.disabled = true;
-                
-                // Add a subtle pulsing effect to the button
-                submitButton.classList.add('pulse-animation');
-            }
-            
-            return true;
-        });
-    }
-    
     // Initialize tooltips
     const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     if (tooltipTriggerList.length > 0) {
@@ -103,58 +77,127 @@ function setupThemeToggle() {
 }
 
 /**
- * Enhance file input appearance
- * @param {HTMLElement} inputElement - The file input element
+ * Setup enhanced file upload with visual feedback
  */
-function enhanceFileInput(inputElement) {
-    const parentElement = inputElement.parentElement;
+function setupEnhancedFileUpload() {
+    const fileInput = document.getElementById('resume');
+    if (!fileInput) return;
     
-    if (parentElement && !parentElement.classList.contains('custom-file-upload')) {
-        // Create wrapper
-        const wrapper = document.createElement('div');
-        wrapper.className = 'custom-file-upload mb-3';
-        wrapper.innerHTML = `
-            <div class="text-center">
-                <i class="fas fa-file-pdf fa-2x mb-2 text-primary"></i>
-                <p class="custom-file-label mb-0">Choose your resume (PDF)</p>
-                <small class="form-text text-muted">Drag & drop or click to select</small>
-            </div>
-        `;
-        
-        // Setup drag and drop
-        wrapper.addEventListener('dragover', function(e) {
-            e.preventDefault();
-            this.classList.add('border-primary');
-        });
-        
-        wrapper.addEventListener('dragleave', function(e) {
-            e.preventDefault();
-            this.classList.remove('border-primary');
-        });
-        
-        wrapper.addEventListener('drop', function(e) {
-            e.preventDefault();
-            this.classList.remove('border-primary');
+    const filePlaceholder = document.getElementById('file-placeholder');
+    const filePreview = document.getElementById('file-preview');
+    const fileName = document.getElementById('file-name');
+    const fileUpload = document.querySelector('.custom-file-upload');
+    
+    if (!filePlaceholder || !filePreview || !fileName || !fileUpload) return;
+    
+    // Handle file selection
+    fileInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            const file = this.files[0];
             
-            if (e.dataTransfer.files.length) {
-                inputElement.files = e.dataTransfer.files;
+            // Check if it's a PDF
+            if (file.type === 'application/pdf') {
+                // Show selected file name
+                fileName.textContent = file.name;
                 
-                // Trigger change event
-                const event = new Event('change', { bubbles: true });
-                inputElement.dispatchEvent(event);
+                // Switch from placeholder to preview
+                filePlaceholder.classList.add('d-none');
+                filePreview.classList.remove('d-none');
+                
+                // Show feedback
+                document.getElementById('submit-status').innerHTML = 
+                    `<span class="text-success">✓ File selected: ${file.name}</span>`;
+                
+                // Show toast
+                showToast('File Selected', `${file.name} selected successfully`, 'success');
+            } else {
+                // Reset if not PDF
+                this.value = '';
+                showToast('Invalid File', 'Please select a PDF file', 'danger');
+                document.getElementById('submit-status').innerHTML = 
+                    '<span class="text-danger">⚠️ Please select a PDF file</span>';
             }
-        });
+        }
+    });
+    
+    // Setup drag and drop
+    fileUpload.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.style.borderColor = 'var(--green-primary)';
+        this.style.backgroundColor = 'rgba(46, 204, 113, 0.1)';
+    });
+    
+    fileUpload.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.style.borderColor = 'var(--green-light)';
+        this.style.backgroundColor = 'rgba(46, 204, 113, 0.05)';
+    });
+    
+    fileUpload.addEventListener('drop', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
         
-        wrapper.addEventListener('click', function() {
-            inputElement.click();
-        });
+        this.style.borderColor = 'var(--green-light)';
+        this.style.backgroundColor = 'rgba(46, 204, 113, 0.05)';
         
-        // Hide original input
-        inputElement.style.display = 'none';
+        if (e.dataTransfer.files.length) {
+            fileInput.files = e.dataTransfer.files;
+            
+            // Trigger change event
+            const event = new Event('change');
+            fileInput.dispatchEvent(event);
+        }
+    });
+    
+    // Make the custom upload clickable
+    fileUpload.addEventListener('click', function() {
+        fileInput.click();
+    });
+}
+
+/**
+ * Setup form submission with loading indicators
+ */
+function setupFormSubmission() {
+    const form = document.querySelector('form[action="/analyze"]');
+    if (!form) return;
+    
+    const submitBtn = document.getElementById('submit-btn');
+    const submitText = document.getElementById('submit-text');
+    const loadingSpinner = document.getElementById('loading-spinner');
+    const submitStatus = document.getElementById('submit-status');
+    
+    if (!submitBtn || !submitText || !loadingSpinner) return;
+    
+    form.addEventListener('submit', function(e) {
+        // Validate file input
+        const fileInput = document.getElementById('resume');
+        if (!fileInput.files || !fileInput.files[0]) {
+            e.preventDefault();
+            showToast('Error', 'Please select a resume file', 'danger');
+            submitStatus.innerHTML = '<span class="text-danger">⚠️ Please select a resume file</span>';
+            return false;
+        }
         
-        // Insert wrapper before input
-        parentElement.insertBefore(wrapper, inputElement);
-    }
+        // Validate job description
+        const jobDescription = document.getElementById('job_description');
+        if (!jobDescription.value.trim()) {
+            e.preventDefault();
+            showToast('Error', 'Please enter a job description', 'danger');
+            submitStatus.innerHTML = '<span class="text-danger">⚠️ Please enter a job description</span>';
+            return false;
+        }
+        
+        // If validation passes, show loading state
+        submitBtn.disabled = true;
+        submitText.textContent = 'Analyzing...';
+        loadingSpinner.classList.remove('d-none');
+        submitStatus.innerHTML = '<span class="text-primary">⏳ Analyzing your resume, please wait...</span>';
+        
+        return true;
+    });
 }
 
 /**
@@ -164,33 +207,54 @@ function enhanceFileInput(inputElement) {
  * @param {string} type - Toast type (success, danger, warning, info)
  */
 function showToast(title, message, type) {
-    // Create toast container if it doesn't exist
-    let toastContainer = document.querySelector('.toast-container');
-    if (!toastContainer) {
-        toastContainer = document.createElement('div');
-        toastContainer.className = 'toast-container position-fixed bottom-0 end-0 p-3';
-        document.body.appendChild(toastContainer);
-    }
+    // Try to use existing toast if available
+    let toastEl = document.getElementById('notificationToast');
     
-    // Create toast element
-    const toastEl = document.createElement('div');
-    toastEl.className = `toast align-items-center text-white bg-${type} border-0`;
-    toastEl.setAttribute('role', 'alert');
-    toastEl.setAttribute('aria-live', 'assertive');
-    toastEl.setAttribute('aria-atomic', 'true');
-    
-    // Create toast content
-    toastEl.innerHTML = `
-        <div class="d-flex">
-            <div class="toast-body">
-                <strong>${title}:</strong> ${message}
+    if (toastEl) {
+        // Update existing toast
+        const toastTitle = document.getElementById('toastTitle');
+        const toastMessage = document.getElementById('toastMessage');
+        const toastTime = document.getElementById('toastTime');
+        
+        if (toastTitle) toastTitle.textContent = title;
+        if (toastMessage) toastMessage.textContent = message;
+        if (toastTime) toastTime.textContent = 'Just now';
+        
+        // Update toast color
+        toastEl.classList.remove('bg-success', 'bg-danger', 'bg-warning', 'bg-info');
+        toastEl.classList.add(`bg-${type}`);
+    } else {
+        // Create toast container if it doesn't exist
+        let toastContainer = document.querySelector('.toast-container');
+        if (!toastContainer) {
+            toastContainer = document.createElement('div');
+            toastContainer.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+            document.body.appendChild(toastContainer);
+        }
+        
+        // Create toast element
+        toastEl = document.createElement('div');
+        toastEl.id = 'notificationToast';
+        toastEl.className = `toast align-items-center text-white bg-${type} border-0`;
+        toastEl.setAttribute('role', 'alert');
+        toastEl.setAttribute('aria-live', 'assertive');
+        toastEl.setAttribute('aria-atomic', 'true');
+        
+        // Create toast content
+        toastEl.innerHTML = `
+            <div class="d-flex">
+                <div class="toast-body">
+                    <span id="toastTitle" class="fw-bold">${title}:</span> 
+                    <span id="toastMessage">${message}</span>
+                    <small id="toastTime" class="d-none">Just now</small>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-    `;
-    
-    // Add toast to container
-    toastContainer.appendChild(toastEl);
+        `;
+        
+        // Add toast to container
+        toastContainer.appendChild(toastEl);
+    }
     
     // Initialize and show toast
     const toast = new bootstrap.Toast(toastEl, {
@@ -198,9 +262,4 @@ function showToast(title, message, type) {
         delay: 5000
     });
     toast.show();
-    
-    // Remove toast element after it's hidden
-    toastEl.addEventListener('hidden.bs.toast', function() {
-        toastEl.remove();
-    });
 }
