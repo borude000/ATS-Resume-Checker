@@ -6,47 +6,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Theme toggle functionality
     setupThemeToggle();
     
-    // File upload validation and UI enhancement
-    const resumeInput = document.getElementById('resume');
-    const fileLabel = document.querySelector('.custom-file-label');
-    
-    if (resumeInput) {
-        // Enhance file input appearance
-        enhanceFileInput(resumeInput);
-        
-        // Validate file on change
-        resumeInput.addEventListener('change', function() {
-            if (!this.files || !this.files[0]) return;
-            
-            const fileSize = this.files[0].size / 1024 / 1024; // in MB
-            const fileType = this.files[0].type;
-            
-            // Update file name display
-            if (fileLabel) {
-                fileLabel.textContent = this.files[0].name;
-            }
-            
-            // Check file size (max 16MB)
-            if (fileSize > 16) {
-                showToast('Error', 'File size exceeds 16MB. Please upload a smaller file.', 'danger');
-                this.value = '';
-                if (fileLabel) {
-                    fileLabel.textContent = 'Choose file...';
-                }
-                return;
-            }
-            
-            // Check file type
-            if (fileType !== 'application/pdf') {
-                showToast('Error', 'Please upload a PDF file.', 'danger');
-                this.value = '';
-                if (fileLabel) {
-                    fileLabel.textContent = 'Choose file...';
-                }
-                return;
-            }
-        });
-    }
+    // Enhanced file upload and form submission
+    setupEnhancedFileUpload();
+    setupFormSubmission();
     
     // Job description form validation
     const analyzeForm = document.querySelector('form[action="/analyze"]');

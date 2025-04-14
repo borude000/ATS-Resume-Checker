@@ -58,8 +58,19 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="mb-3">
-                                        <label for="resume" class="form-label visually-hidden">Select a PDF file</label>
-                                        <input class="form-control" type="file" id="resume" name="resume" accept=".pdf" required>
+                                        <label for="resume" class="form-label">Select a PDF file</label>
+                                        <div class="custom-file-upload">
+                                            <div class="file-upload-placeholder" id="file-placeholder">
+                                                <i class="fas fa-cloud-upload-alt fa-2x mb-2"></i>
+                                                <p>Drag & drop your resume here or click to browse</p>
+                                            </div>
+                                            <div class="file-upload-preview d-none" id="file-preview">
+                                                <i class="fas fa-file-pdf fa-2x mb-2 text-success"></i>
+                                                <p id="file-name">No file selected</p>
+                                                <small class="text-muted">Click to change file</small>
+                                            </div>
+                                            <input class="form-control visually-hidden" type="file" id="resume" name="resume" accept=".pdf" required>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -85,10 +96,12 @@
                     </div>
                     
                     <div class="text-center mb-5">
-                        <button type="submit" class="btn btn-primary btn-lg px-5 py-3">
+                        <button type="submit" id="submit-btn" class="btn btn-primary btn-lg px-5 py-3">
                             <i class="fas fa-search me-2"></i>
-                            Analyze Resume
+                            <span id="submit-text">Analyze Resume</span>
+                            <span id="loading-spinner" class="d-none spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>
                         </button>
+                        <div class="form-text mt-2" id="submit-status"></div>
                     </div>
                 </form>
             </div>

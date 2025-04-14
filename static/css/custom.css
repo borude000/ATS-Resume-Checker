@@ -270,6 +270,7 @@ body {
 /* File upload styles */
 .custom-file-upload {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 1.5rem;
@@ -282,6 +283,34 @@ body {
 
 .custom-file-upload:hover {
     background-color: rgba(46, 204, 113, 0.1);
+}
+
+.file-upload-placeholder, .file-upload-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.file-upload-preview #file-name {
+    font-weight: 600;
+    margin: 10px 0 5px;
+    word-break: break-all;
+}
+
+/* Loading button styles */
+.btn-loading {
+    position: relative;
+}
+
+.btn-loading .spinner-border {
+    vertical-align: middle;
+}
+
+#submit-status {
+    margin-top: 8px;
+    font-weight: 500;
 }
 
 /* Animations */
