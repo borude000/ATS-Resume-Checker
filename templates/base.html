@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATS Resume Checker</title>
+    <meta name="description" content="ATS Resume Checker - Optimize your resume for Applicant Tracking Systems and land more interviews">
+    <meta name="keywords" content="resume checker, ATS, applicant tracking system, resume optimization, job search">
+    <title>ATS Resume Checker - Optimize your resume for job applications</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.ico') }}">
     
     <!-- Bootstrap 5 CSS - Replit Theme -->
     <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
@@ -20,7 +25,7 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4 sticky-top">
         <div class="container">
             <a class="navbar-brand" href="/">
                 <i class="fas fa-file-alt me-2"></i>
@@ -33,10 +38,14 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-home me-1"></i> Home
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                        <a class="nav-link" href="/dashboard">
+                            <i class="fas fa-chart-line me-1"></i> Dashboard
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -47,7 +56,8 @@
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    <div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm" role="alert">
+                        <i class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-triangle{% elif category == 'warning' %}exclamation-circle{% else %}info-circle{% endif %} me-2"></i>
                         {{ message }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
@@ -58,9 +68,31 @@
         {% block content %}{% endblock %}
     </div>
 
-    <footer class="footer mt-5 py-3 bg-dark">
-        <div class="container text-center">
-            <span class="text-muted">© 2023 ATS Resume Checker | Helping job seekers optimize their resumes</span>
+    <footer class="footer mt-5 py-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <div class="d-flex align-items-center justify-content-center justify-content-md-start">
+                        <i class="fas fa-file-alt me-2 fs-4"></i>
+                        <span class="fs-5 fw-bold">ATS Resume Checker</span>
+                    </div>
+                    <p class="text-muted mt-2 mb-0">Helping job seekers optimize their resumes since 2023</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <p class="mb-0">&copy; 2023-2025 ATS Resume Checker</p>
+                    <div class="mt-2">
+                        <a href="#" class="text-decoration-none me-3">
+                            <i class="fab fa-twitter text-white"></i>
+                        </a>
+                        <a href="#" class="text-decoration-none me-3">
+                            <i class="fab fa-linkedin text-white"></i>
+                        </a>
+                        <a href="#" class="text-decoration-none">
+                            <i class="fab fa-github text-white"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </footer>
 

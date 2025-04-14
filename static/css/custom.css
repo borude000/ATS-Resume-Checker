@@ -1,9 +1,86 @@
 /* Custom styles for the ATS Resume Checker */
 
+:root {
+    --green-primary: #1e8449;
+    --green-secondary: #27ae60;
+    --green-light: #2ecc71;
+    --green-very-light: #d5f5e3;
+}
+
+[data-bs-theme=light] {
+    --body-bg: #f8f9fa;
+    --card-bg: #ffffff;
+    --text-color: #212529;
+    --border-color: rgba(0, 0, 0, 0.125);
+    --green-gradient-start: #d5f5e3;
+    --green-gradient-end: #ffffff;
+}
+
+[data-bs-theme=dark] {
+    --body-bg: #1a1a1a;
+    --card-bg: #2c2c2c;
+    --text-color: #e9ecef;
+    --border-color: rgba(255, 255, 255, 0.125);
+    --green-gradient-start: #154c29;
+    --green-gradient-end: #1a1a1a;
+}
+
+body {
+    background: linear-gradient(135deg, var(--green-gradient-start) 0%, var(--green-gradient-end) 100%);
+    background-attachment: fixed;
+    transition: background 0.3s ease;
+}
+
+.card {
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    border: none;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    background-color: var(--green-primary);
+    color: white;
+    font-weight: bold;
+    border-bottom: none;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+}
+
+.theme-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
 /* Feature Icons */
 .feature-icon {
     margin-bottom: 1rem;
-    color: var(--bs-primary);
+    color: var(--green-secondary);
+    transition: transform 0.3s ease;
+}
+
+.feature-icon i {
+    transition: transform 0.3s ease;
+}
+
+.feature-icon:hover i {
+    transform: scale(1.2);
 }
 
 /* Step circles for "How it works" section */
@@ -11,13 +88,123 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
-    background-color: var(--bs-primary);
+    background-color: var(--green-secondary);
     color: white;
     font-weight: bold;
     margin-bottom: 0.5rem;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.step-circle:hover {
+    transform: scale(1.1);
+}
+
+/* Button styling */
+.btn-primary {
+    background-color: var(--green-primary);
+    border-color: var(--green-primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--green-secondary);
+    border-color: var(--green-secondary);
+}
+
+.btn-outline-primary {
+    color: var(--green-primary);
+    border-color: var(--green-primary);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--green-primary);
+    border-color: var(--green-primary);
+}
+
+/* Score circle */
+.score-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    font-size: 3rem;
+    font-weight: bold;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.score-circle:hover {
+    transform: scale(1.05);
+}
+
+/* Progress bars */
+.progress {
+    height: 0.8rem;
+    border-radius: 1rem;
+    background-color: rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+}
+
+.progress-bar {
+    border-radius: 1rem;
+}
+
+.progress-bar-striped {
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+}
+
+/* Navbar */
+.navbar {
+    background: linear-gradient(to right, var(--green-primary), var(--green-secondary)) !important;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: white !important;
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.85) !important;
+    transition: color 0.3s;
+}
+
+.nav-link:hover {
+    color: white !important;
+}
+
+/* Keyword badges */
+.keyword-badge {
+    margin: 0.2rem;
+    font-size: 0.9rem;
+    border-radius: 2rem;
+    padding: 0.35rem 0.75rem;
+    transition: transform 0.3s;
+}
+
+.keyword-badge:hover {
+    transform: scale(1.05);
+}
+
+/* Suggestion items */
+.suggestion-item {
+    padding: 0.8rem 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.3s;
+}
+
+.suggestion-item:hover {
+    background-color: rgba(46, 204, 113, 0.1);
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
 }
 
 /* Dashboard page styles */
@@ -32,7 +219,7 @@
 
 /* Print styles */
 @media print {
-    .navbar, .footer, button, .btn {
+    .navbar, .footer, button, .btn, .theme-toggle {
         display: none !important;
     }
     
@@ -44,11 +231,12 @@
     .card {
         border: 1px solid #ddd;
         margin-bottom: 15px;
+        box-shadow: none;
     }
     
     body {
-        background-color: white;
-        color: black;
+        background: white !important;
+        color: black !important;
     }
     
     .score-circle {
@@ -71,12 +259,40 @@
 .footer {
     margin-top: 3rem;
     padding: 1.5rem 0;
-    background-color: var(--bs-dark);
+    background: linear-gradient(to right, var(--green-primary), var(--green-secondary)) !important;
+    color: white;
+}
+
+.footer .text-muted {
+    color: rgba(255, 255, 255, 0.8) !important;
 }
 
 /* File upload styles */
-.form-file {
-    position: relative;
+.custom-file-upload {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    border: 2px dashed var(--green-light);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    background-color: rgba(46, 204, 113, 0.05);
+    transition: all 0.3s;
+}
+
+.custom-file-upload:hover {
+    background-color: rgba(46, 204, 113, 0.1);
+}
+
+/* Animations */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.pulse-animation {
+    animation: pulse 2s infinite;
 }
 
 /* Responsive adjustments */
@@ -85,5 +301,9 @@
         width: 120px;
         height: 120px;
         font-size: 2.5rem;
+    }
+    
+    .card {
+        margin-bottom: 1.5rem;
     }
 }

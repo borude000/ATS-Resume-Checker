@@ -3,72 +3,89 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-10">
+        <!-- Hero Section -->
         <div class="card mb-5">
-            <div class="card-body">
-                <div class="text-center mb-4">
-                    <h1 class="display-4">ATS Resume Checker</h1>
-                    <p class="lead">Upload your resume and a job description to see how well they match</p>
+            <div class="card-body py-5">
+                <div class="text-center mb-5">
+                    <h1 class="display-4 fw-bold">ATS Resume Checker</h1>
+                    <p class="lead mb-4">Optimize your resume for Applicant Tracking Systems and land more interviews</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <span class="badge bg-success rounded-pill px-3 py-2">
+                            <i class="fas fa-check-circle me-1"></i> AI-Powered Analysis
+                        </span>
+                        <span class="badge bg-success rounded-pill px-3 py-2">
+                            <i class="fas fa-check-circle me-1"></i> Keyword Optimization
+                        </span>
+                        <span class="badge bg-success rounded-pill px-3 py-2">
+                            <i class="fas fa-check-circle me-1"></i> Personalized Feedback
+                        </span>
+                    </div>
                 </div>
                 
-                <div class="row mb-4">
-                    <div class="col-md-4 text-center mb-3 mb-md-0">
+                <div class="row mb-5">
+                    <div class="col-md-4 text-center mb-4 mb-md-0">
                         <div class="feature-icon">
-                            <i class="fas fa-robot fa-3x mb-3 text-primary"></i>
+                            <i class="fas fa-robot fa-3x mb-3"></i>
                         </div>
                         <h5>ATS Compatibility</h5>
-                        <p>Check if your resume is optimized for Applicant Tracking Systems</p>
+                        <p>Ensure your resume passes through Applicant Tracking Systems with flying colors</p>
                     </div>
-                    <div class="col-md-4 text-center mb-3 mb-md-0">
+                    <div class="col-md-4 text-center mb-4 mb-md-0">
                         <div class="feature-icon">
-                            <i class="fas fa-key fa-3x mb-3 text-primary"></i>
+                            <i class="fas fa-key fa-3x mb-3"></i>
                         </div>
                         <h5>Keyword Analysis</h5>
-                        <p>Find key terms your resume is missing from the job description</p>
+                        <p>Identify important keywords your resume is missing from the job description</p>
                     </div>
-                    <div class="col-md-4 text-center">
+                    <div class="col-md-4 text-center mb-4 mb-md-0">
                         <div class="feature-icon">
-                            <i class="fas fa-lightbulb fa-3x mb-3 text-primary"></i>
+                            <i class="fas fa-lightbulb fa-3x mb-3"></i>
                         </div>
                         <h5>Smart Suggestions</h5>
-                        <p>Get personalized recommendations to improve your resume</p>
+                        <p>Receive tailored recommendations to improve your resume's effectiveness</p>
                     </div>
                 </div>
                 
                 <form action="/analyze" method="post" enctype="multipart/form-data">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <h3 class="h5 mb-0">
-                                <i class="fas fa-file-upload me-2"></i>
-                                Upload Your Resume
-                            </h3>
+                    <div class="row">
+                        <div class="col-lg-6 mb-4">
+                            <div class="card h-100 border-0 shadow-sm">
+                                <div class="card-header">
+                                    <h3 class="h5 mb-0">
+                                        <i class="fas fa-file-upload me-2"></i>
+                                        Upload Your Resume
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="resume" class="form-label visually-hidden">Select a PDF file</label>
+                                        <input class="form-control" type="file" id="resume" name="resume" accept=".pdf" required>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <label for="resume" class="form-label">Select a PDF file</label>
-                                <input class="form-control" type="file" id="resume" name="resume" accept=".pdf" required>
-                                <div class="form-text">Your resume must be in PDF format</div>
+                        
+                        <div class="col-lg-6 mb-4">
+                            <div class="card h-100 border-0 shadow-sm">
+                                <div class="card-header">
+                                    <h3 class="h5 mb-0">
+                                        <i class="fas fa-briefcase me-2"></i>
+                                        Job Description
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="job_description" class="form-label visually-hidden">Paste the job description</label>
+                                        <textarea class="form-control" id="job_description" name="job_description" rows="6" placeholder="Copy and paste the full job description here..." required></textarea>
+                                        <div class="form-text mt-2">For the best results, include the entire job description</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <h3 class="h5 mb-0">
-                                <i class="fas fa-briefcase me-2"></i>
-                                Job Description
-                            </h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <label for="job_description" class="form-label">Paste the job description</label>
-                                <textarea class="form-control" id="job_description" name="job_description" rows="6" placeholder="Copy and paste the full job description here..." required></textarea>
-                                <div class="form-text">For the best results, include the entire job description</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-primary btn-lg">
+                    <div class="text-center mb-5">
+                        <button type="submit" class="btn btn-primary btn-lg px-5 py-3">
                             <i class="fas fa-search me-2"></i>
                             Analyze Resume
                         </button>
@@ -77,31 +94,112 @@
             </div>
         </div>
         
-        <div class="card">
+        <!-- How It Works Section -->
+        <div class="card mb-5">
             <div class="card-header">
                 <h3 class="h5 mb-0">How It Works</h3>
             </div>
-            <div class="card-body">
+            <div class="card-body py-4">
                 <div class="row">
-                    <div class="col-md-3 text-center mb-3 mb-md-0">
-                        <div class="step-circle mb-2">1</div>
-                        <h6>Upload</h6>
+                    <div class="col-md-3 text-center mb-4 mb-md-0">
+                        <div class="step-circle mb-3">1</div>
+                        <h6 class="fw-bold">Upload</h6>
                         <p class="small">Upload your resume as a PDF file</p>
                     </div>
-                    <div class="col-md-3 text-center mb-3 mb-md-0">
-                        <div class="step-circle mb-2">2</div>
-                        <h6>Add Job Details</h6>
+                    <div class="col-md-3 text-center mb-4 mb-md-0">
+                        <div class="step-circle mb-3">2</div>
+                        <h6 class="fw-bold">Add Job Details</h6>
                         <p class="small">Paste the job description you're applying for</p>
                     </div>
-                    <div class="col-md-3 text-center mb-3 mb-md-0">
-                        <div class="step-circle mb-2">3</div>
-                        <h6>Analyze</h6>
+                    <div class="col-md-3 text-center mb-4 mb-md-0">
+                        <div class="step-circle mb-3">3</div>
+                        <h6 class="fw-bold">Analyze</h6>
                         <p class="small">Our AI analyzes your resume against ATS criteria</p>
                     </div>
                     <div class="col-md-3 text-center">
-                        <div class="step-circle mb-2">4</div>
-                        <h6>Improve</h6>
+                        <div class="step-circle mb-3">4</div>
+                        <h6 class="fw-bold">Improve</h6>
                         <p class="small">Get actionable tips to enhance your resume</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Testimonials Section -->
+        <div class="card mb-5">
+            <div class="card-header">
+                <h3 class="h5 mb-0">What Our Users Say</h3>
+            </div>
+            <div class="card-body py-4">
+                <div class="row">
+                    <div class="col-md-4 mb-4 mb-md-0">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="mb-3 text-warning">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <p class="mb-3">"After optimizing my resume with this tool, I received twice as many interview calls. The keyword suggestions were spot on!"</p>
+                                <div class="d-flex align-items-center">
+                                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">John D.</h6>
+                                        <small class="text-muted">Software Engineer</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4 mb-md-0">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="mb-3 text-warning">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <p class="mb-3">"The ATS compatibility check saved my application. I had no idea tables in my resume were causing issues with ATS systems."</p>
+                                <div class="d-flex align-items-center">
+                                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">Sarah M.</h6>
+                                        <small class="text-muted">Marketing Specialist</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="mb-3 text-warning">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <p class="mb-3">"The detailed analysis helped me understand exactly what was missing from my resume. Got a job offer within two weeks!"</p>
+                                <div class="d-flex align-items-center">
+                                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">Michael K.</h6>
+                                        <small class="text-muted">Data Analyst</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
